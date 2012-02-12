@@ -1,10 +1,10 @@
 set output 'chrome.stackoverflow.com.png'
-set terminal png
+set terminal png size 400,600
 set grid 
 set style fill solid 1.0
 set yrange [0:] reverse
 set xrange [0:] 
-set key left bottom
+set key below
 set ytics 0, 5
 set xtics 0, 100 rotate
 plot  '-' title 'blocked' with boxxyerrorbars, \

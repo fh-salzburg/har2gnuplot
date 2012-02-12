@@ -1,6 +1,8 @@
 har2gnuplot
 ===========
 
+<img src="https://github.com/fh-salzburg/har2gnuplot/raw/master/examples/chrome.stackoverflow.com.png" align="right">
+
 convert a har file into a gnuplot file,
 so you can use your network-dumps in a paper.
 
