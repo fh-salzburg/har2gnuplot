@@ -1,5 +1,10 @@
 #!/usr/bin/env node
 /* 
+Copyright (c) 2012 Brigitte Jellinek
+you can use it under the MIT License
+
+https://github.com/fh-salzburg/har2gnuplot
+
 this is a javascript program to extract some
 statistics from http archive files (.har) 
     see http://www.softwareishard.com/blog/firebug/http-archive-specification/
