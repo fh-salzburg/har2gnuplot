@@ -1,0 +1,100 @@
+#!/usr/bin/env node
+/* 
+this is a javascript program to extract some
+statistics from http archive files (.har) 
+    see http://www.softwareishard.com/blog/firebug/http-archive-specification/
+the output is a gnuplot file
+    see http://www.gnuplot.info/
+*/
+
+var __  = require('underscore');
+var cli = require('cli'), options = cli.parse();
+
+cli.withStdin(function(string) {
+    this.output( stats( JSON.parse(string) ) );
+});
+
+
+function stats( har ) {
+  var out = "";
+
+  var outcomment = function(s) {
+    out += "# " + s + "\n";
+  }
+
+  var boxesfor = function(a,b) {
+    var out = "";
+    for(var k in a ) {
+      // x
+      // out += [i, a[i], i-0.4, i*1+0.4, a[i], b[i]].join("\t");
+      // y
+      i = k*1 + 1;
+      out += [a[k], i, a[k], b[k], i-0.4, i+0.4].join("\t");
+      out += "\n";
+    }
+    out += "e\n";
+    return out;
+  }
+
+  // phase 1: collect data into more compact data structures
+
+  // maximum of onLoadTime = maximum time of the whole graph
+  har.log.max = 0
+
+  // for every page loaded, t0 is the start-time of the first http-request
+  var t0;
+
+  // collect onContentLoad and onLoad data for all pages, will be displayed in gnuplot as "impulses"
+  var impulses = { onContentLoad: [], onLoad: [] };
+
+  // collect the timings for each singly entry (=http request+response), will be displayed as boxes
+  var bars     = { start: [], blocked: [], dns: [], connect:[], send:[], wait:[], receive: [] };
+  var bars_index = 0;
+
+  for(i in har.log.pages) {
+    var page    = har.log.pages[i];
+    page.entries = __.filter( har.log.entries, function(e){ return e.pageref === page.id } );
+    har.log.max = __.max( har.log.max, page.pageTimings.onLoad );
+
+    impulses.onContentLoad[i] = page.pageTimings.onContentLoad;
+    impulses.onLoad[i]        = page.pageTimings.onLoad;
+
+    t0 = new Date( page.entries[0].startedDateTime ).getTime();
+
+    for(i in page.entries ) {
+      var t1 = new Date( page.entries[i].startedDateTime ).getTime() - t0;
+      var t = page.entries[i].timings;
+      bars.start[bars_index]   = t1;
+      bars.blocked[bars_index] = t1 + t.blocked;
+      bars.dns[bars_index]     = t1 + t.blocked + t.dns;
+      bars.connect[bars_index] = t1 + t.blocked + t.dns + t.connect;
+      bars.send[bars_index]    = t1 + t.blocked + t.dns + t.connect + t.send;
+      bars.wait[bars_index]    = t1 + t.blocked + t.dns + t.connect + t.send + t.wait;
+      bars.receive[bars_index] = t1 + t.blocked + t.dns + t.connect + t.send + t.wait + t.receive;
+      bars_index++;
+    }
+  }
+
+  // construct the output for gnuplot
+
+  // first the data for the bars / boxes
+  out += boxesfor( bars.start, bars.blocked );
+  out += boxesfor( bars.blocked, bars.dns );
+  out += boxesfor( bars.dns, bars.connect );
+  out += boxesfor( bars.connect, bars.send );
+  out += boxesfor( bars.send, bars.wait );
+  out += boxesfor( bars.wait, bars.receive );
+
+  // then the data for the on*Load events
+  for(i in impulses.onContentLoad) {
+    out += impulses.onContentLoad[i] + " " + (har.log.entries.length + 0.5) + "\n";
+  }
+  out += "e\n";
+
+  for(i in impulses.onLoad) {
+    out += impulses.onLoad[i] + " " + (har.log.entries.length + 0.5) + "\n";
+  }
+  out += "e\n";
+
+  return out;
+}

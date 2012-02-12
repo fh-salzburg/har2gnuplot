@@ -1,0 +1,15 @@
+set grid 
+set style fill solid 1.0
+set yrange [0:] reverse
+set xrange [0:] 
+set key left bottom
+set ytics 0, 5
+set xtics 0, 100 rotate
+plot  '-' title 'blocked' with boxxyerrorbars, \
+      '-' title 'dns'     with boxxyerrorbars, \
+      '-' title 'connect' with boxxyerrorbars, \
+      '-' title 'send'    with boxxyerrorbars, \
+      '-' title 'wait'    with boxxyerrorbars, \
+      '-' title 'receive' with boxxyerrorbars, \
+      '-' title 'onContentLoad' with impulses lt 1, \
+      '-' title 'onLoad'        with impulses lt 2
