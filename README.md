@@ -18,7 +18,7 @@ Why
 If you want optimize your wegpage, you use firebugs network panel 
 or similar tools to explore the timing of the many HTTP requests 
 that go into displaying one webpage.
-See [Sounders Books](http://stevesouders.com/) for an introduction.
+See [Souders' Books](http://stevesouders.com/) for an introduction.
 
 The Data from these tools can be exported in HTTP Archive format [HAR](http://www.softwareishard.com/blog/har-12-spec/).
 (It's basically a JSON-Dump of all the data displayed in the network tab.)
