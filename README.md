@@ -55,9 +55,7 @@ Sorry, the makefile does not work for windows.  You have to do stuff manually:
 
 now try if the program works for the example file:
 * cp copy examples\chrome.stackoverflow.com.har .
-* echo set output 'chrome.stackoverflow.com.png' > chrome.stackoverflow.com.gnu
-* echo set terminal png >> chrome.stackoverflow.com.gnu
-* cat template-gnuplot-waterfall >> chrome.stackoverflow.com.gnu
-* node har2gnuplot < chrome.stackoverflow.com.har >> chrome.stackoverflow.com.gnu 
-* gnuplot chrome.stackoverflow.com.gnu 
+* if you have gnuplot in your path, uncomment in the batch file the last line
+* otherwise open the .gnu files in gnuplot or wgnuplot afterwards 
+* execute the batch file
 
