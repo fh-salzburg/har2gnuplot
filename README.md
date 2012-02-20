@@ -41,3 +41,23 @@ it should be an exact copy of the waterfall graph.
 If you want to modify and improve the graphs, 
 copy the generated *.gnu files to somewhere else, 
 and play around with the [many options of gnuplot](http://www.gnuplot.info/)
+
+
+Windows
+-------
+
+Sorry, the makefile does not work for windows.  You have to do stuff manually:
+
+* Install node.js, there's an [Installer evailable](http://nodejs.org/)
+* Install gnuplot, there's [ on Sourceforge](http://sourceforge.net/projects/gnuplot/files/gnuplot)
+* Add the nodejs directory to your PATH, so you can use npm and node on the command line
+* npm install underscore module cli 
+
+now try if the program works for the example file:
+* cp copy examples\chrome.stackoverflow.com.har .
+* echo set output 'chrome.stackoverflow.com.png' > chrome.stackoverflow.com.gnu
+* echo set terminal png >> chrome.stackoverflow.com.gnu
+* cat template-gnuplot-waterfall >> chrome.stackoverflow.com.gnu
+* node har2gnuplot < chrome.stackoverflow.com.har >> chrome.stackoverflow.com.gnu 
+* gnuplot chrome.stackoverflow.com.gnu 
+
